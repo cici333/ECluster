@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+<style type="text/css">
+<!--
+.STYLE1 {font-family: "新宋体"}
+.STYLE2 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+</head>
+
+<body>
+<h1>ClusterE系统插件开发方法：</h1>
+<h2>1，基于ClusterE系统插件开发</h2>
+<h4> （1），类的实现</h4>
+<p><br />
+  <span class="STYLE2">每个插件类需要继承JPF提供的抽象类org.java.plugin.Plugin  空实现其中的两个方法doStart(),doStop()，该类还需实现本系统提供的功能接口NewAlogrithm，不同类型的插件实现其中不同的方法，</span></p>
+<p class="STYLE2">NewAlogrithm接口中提供聚类算法扩展的方法：<br />
+  Public String getAlgorithmNmae()：该方法返回聚类算法名称<br />
+  Public Vector&lt;Node&gt;[]? getClusters(String[] para)：该方法返回蛋白质网络聚类结果，方法参数para[]是算法中所用的参数数组对象，返回的对象是数组对象，每个数组元素也是一个Vector对象，代表一个簇即一个复合物，Vector中所存储的对象是继承自本系统提供的com.wuxuehng.bean.Node类的对象。<br />
+  Public String[] getParams()：获取聚类算法参数名称数组<br />
+  Public String[] getParaValues()： 获取聚类算法参数的初始化值数组。<br />
+  Public String getDescription()： 返回对该聚类算法的描述<br />
+  Public int getStyle()：获得该插件类型，返回值是NewAlgorithm.Algorithm;<br />
+  Public void variableInit()：聚类算法中变量初始化<br />
+  NewAlogrithm接口中提供评估方法扩展的方法：<br />
+  Public String getEvaluateNames()：反回该评估方法的名称；<br />
+  Public void drawCharts(){String[]  algorithm,HashMap&lt;String,Vector&lt;Node&gt;[] resultList&gt;,<br />
+  Composite  composite,HashMap&lt;String,RGB&gt; colorlist}：该方法实现对聚类算法结果的分析与比较。参数algorithm[]是需要比较分析的算法名称；参数resultList[]是所有已实现的聚类算法的聚类结果信息；参数composite是系统提供的评估方法显示面板；参数colorlist是所有聚类算法颜色信息。<br />
+  Public String getDescription()： 返回对该评估方法的描述<br />
+  Public int getStyle()：获得该插件类型，返回值是NewAlgorithm.Evaluation;<br />
+  Public void variableInit()：评估方法中变量初始化</p>
+<h4>（2）,plugin.xml文件配置</h4>
+<p><br />
+  <span class="STYLE2">为了绑定插件，我们必须创建一个.jar文件，该文件必须包含插件清单文件plugin.xml。<br />
+  <strong>&lt;?xml  version=&quot;1.0&quot; ?&gt;</strong> <br />
+  <strong>&lt;!DOCTYPE  plugin PUBLIC </strong>&quot;-//JPF//Java  Plug-in Manifest 1.0&quot; &quot;http://jpf.sourceforge.net/plugin_1_0.dtd&quot;<strong>&gt;</strong> <br />
+&lt;plugin id=&quot; &quot; version=&quot;1.0.0&quot; <br />
+class=&quot; &quot;&gt; <br />
+&lt;runtime&gt; <br />
+&lt;library id=&quot;ruby&quot; path=&quot;/&quot; type=&quot;code&quot;/&gt; <br />
+&lt;/runtime&gt; <br />
+&lt;/plugin&gt; <br />
+该插件清单文件包括了插件id，插件版本，以及插件的主类，我们也申明插件代码在.jar文件根目录下。<br />
+因此一个插件通常被打包成.jar文件，该文件中包括plugin.xml文件以及实现了NewAlgorithm接口的类的class文件。</span></p>
+<h2>2，Example：FAG-EC插件开发</h2>
+<h4>(1),FAG-EC聚类算法插件中主类的实现</h4>
+<p><br />
+  <span class="STYLE2">插件主类：<br />
+  <strong>public</strong> <strong>class</strong> SecondPlugin <strong>extends</strong> Plugin <strong>implements</strong> NewAlgorithm<br />
+  实现方法getStyle()获得此插件的类型： <br />
+  <strong>public</strong> <strong>int</strong> getStyle() { <br />
+  // <strong>TODO</strong> Auto-generated method stub <br />
+  <strong>return</strong> NewAlgorithm.<em>Algorithm</em>; //本插件属于聚类算法插件 <br />
+  }<br />
+  实现方法doStart(),doStop()这两个方法都空实现。 <br />
+  <strong>protected</strong> <strong>void</strong> doStart() <strong>throws</strong> Exception { <br />
+  // <strong>TODO</strong> Auto-generated method stub <br />
+  } <br />
+  <strong>protected</strong> <strong>void</strong> doStop() <strong>throws</strong> Exception { <br />
+  // <strong>TODO</strong> Auto-generated method stub <br />
+  }<br />
+  实现方法getAlgorithmName()获得聚类算法名： <br />
+  <strong>public</strong> String getAlgorithmName() { <br />
+  // <strong>TODO</strong> Auto-generated method stub <br />
+  <strong>return</strong> &quot;FAG-EC&quot;; <br />
+  }<br />
+  实现方法getParams()获得该算法所需所有参数：<br />
+  <strong>public</strong> String[] getParams() { <br />
+  // <strong>TODO</strong> Auto-generated method stub <br />
+  <strong>return</strong> <strong>new</strong> String[]{&quot;Threshold(0-1)&quot;,&quot;ComplexSize(&gt;=2)&quot;}; <br />
+  }<br />
+  实现方法getParaValues()获得算法中所有参数初始值： <br />
+  <strong>public</strong> String[] getParaValues() { <br />
+  // <strong>TODO</strong> Auto-generated method stub <br />
+  <strong>return</strong> <strong>new</strong> String[]{&quot;0.1&quot;,&quot;3&quot;}; <br />
+  }<br />
+  实现方法variableInit()初始化本插件中所有变量： <br />
+  <strong>public</strong> <strong>void</strong> variableInit() { <br />
+  // <strong>TODO</strong> Auto-generated method stub? 本插件中没有用到全局变量所以空实现 <br />
+  }<br />
+  实现本插件核心方法<strong>Public</strong> Vector&lt;Node&gt;[]  getClusters(String[] para){};在此方法中调用FAG-EC聚类算法实现对蛋白质网络的聚类分析，并以Vector&lt;Node&gt;[]类型返回聚类结果。Vector向量中所装的对象必须是继承自本系统提供的Node类的对象。</span> <br />
+其他方法都是空实现。 </p>
+<h4><br />
+  (2),plugin.xml插件清单文件描述 </h4>
+<p class="STYLE2"><br />
+  <strong>&lt;?xml  version=&quot;1.0&quot; ?&gt;</strong> <br />
+  <strong>&lt;!DOCTYPE  plugin PUBLIC </strong>&quot;-//JPF//Java  Plug-in Manifest 1.0&quot; &quot;http://jpf.sourceforge.net/plugin_1_0.dtd&quot;<strong>&gt;</strong> <br />
+&lt;plugin id=&quot;com.wuxuehong.plugin.FAG-EC&quot; version=&quot;1.0.0&quot; <br />
+class=&quot;com.wuxuehong.plugin.SecondPlugin&quot;&gt; <br />
+&lt;runtime&gt; <br />
+&lt;library id=&quot;FAG-EC&quot; path=&quot;/&quot; type=&quot;code&quot;/&gt; <br />
+&lt;/runtime&gt; <br />
+&lt;/plugin&gt; <br />
+本插件清单文件中，设置插件id为”com.wuxuehong.plugin.FAG-EC”插件版本”1.0.0”，插件的主类“com.wuxuehong.plugin.SecondPlugin”。</p>
+<h4><br />
+  (3),插件打包</h4>
+<p><br />
+  <span class="STYLE1">将编译好的class文件与plugin.xml文件打成jar包并且将该jar包放到系统指定读取的文件夹下。</span><br />
+</p>
+<p>&nbsp;</p>
+</body>
+</html>

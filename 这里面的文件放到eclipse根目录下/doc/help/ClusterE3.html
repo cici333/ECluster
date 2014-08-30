@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+<style type="text/css">
+<!--
+.STYLE1 {font-family: "新宋体"}
+.STYLE2 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+</head>
+
+<body>
+<h2>How to develop clusterE plug-ins：</h2>
+
+<h4> 1,The implement of the interface</h4>
+<p>
+  <span class="STYLE2">Implement the abstract class "org.java.plugin.Plugin" from JPF  ,implement two methods "doStart()" and "doStop()"，
+  Implement the interface NewAlogrithm offered by the system，different plug-in implements different methods，</span></p>
+<p class="STYLE2"><h3>Introduce the methods which used to implement a clustering algorithm：</h3>
+  Public String getAlgorithmNmae()：//get the name of the algorithm<br />
+  Public Vector<Node>[] getClusters(String[] para)：//get the functional modules<br />
+  Public String[] getParams()：//get the paramater names<br />
+  Public String[] getParaValues()： //get the paramater values。<br />
+  Public String getDescription()： //get the description of the algorithm<br />
+  Public int getStyle()：//get the plug-in type:NewAlgorithm.Algorithm;<br />
+  Public void variableInit()：//initialize the variables <br />
+ 
+  <h3>Introduce the methods which used to implement a evaluation：</h3>
+  Public String getEvaluateNames()：//get the evaluation name；<br />
+  Public void drawCharts(){String[]  algorithm,HashMap&lt;String,Vector&lt;Node&gt;[] resultList&gt;,<br />
+  Composite  composite,HashMap&lt;String,RGB&gt; colorlist}：//used to evaluate the results。<br />
+  Public String getDescription()： //get the description of the evaluation<br />
+  Public int getStyle()：//get the plug-in type:NewAlgorithm.Evaluation;<br />
+  Public void variableInit()：//initialize the variables</p>
+<h4>2,plugin.xml</h4>
+<p><br />
+  <span class="STYLE2">To bundle a plug-in we need a .jar file,and there must be a plugin.xml file inside。<br />
+  &lt;?xml  version=&quot;1.0&quot; ?&gt; <br />
+  &lt;!DOCTYPE  plugin PUBLIC &quot;-//JPF//Java  Plug-in Manifest 1.0&quot; &quot;http://jpf.sourceforge.net/plugin_1_0.dtd&quot;&gt; <br />
+&lt;plugin id=&quot; &quot; version=&quot;1.0.0&quot; <br />
+class=&quot; &quot;&gt; <br />
+&lt;runtime&gt; <br />
+&lt;library id=&quot;ruby&quot; path=&quot;/&quot; type=&quot;code&quot;/&gt; <br />
+&lt;/runtime&gt; <br />
+&lt;/plugin&gt; <br />
+This file contains the information about plug-in id,plug-in version,plug-in main class and so on
+<br />
+</span></p>
+<h4>3，Example：FAG-EC plug-in</h4>
+<h4>(1),Main class FAG-EC</h4>
+<p><br />
+  <span class="STYLE2">Main class in this plug-in：<br />
+  public class SecondPlugin extends Plugin implements NewAlgorithm<br />
+   <br />
+  public int getStyle() { <br />
+  
+  return NewAlgorithm.<em>Algorithm</em>;  <br />
+  }<br />
+  <br />
+  protected void doStart() throws Exception { <br />
+  
+  } <br />
+  protected void doStop() throws Exception { <br />
+  
+  }<br />
+   <br />
+  public String getAlgorithmName() { <br />
+  
+  return &quot;FAG-EC&quot;; <br />
+  }<br />
+  <br />
+  public String[] getParams() { <br />
+  
+  return new String[]{&quot;Threshold(0-1)&quot;,&quot;ComplexSize(&gt;=2)&quot;}; <br />
+  }<br />
+  <br />
+  public String[] getParaValues() { <br />
+  
+  return new String[]{&quot;0.1&quot;,&quot;3&quot;}; <br />
+  }<br />
+  <br />
+  public void variableInit() { <br />
+ 
+  }<br />
+ Public Vector&lt;Node&gt;[]  getClusters(String[] para){};</span> <br />
+ </p>
+<h4><br />
+  (2),plugin.xml </h4>
+<p class="STYLE2"><br />
+  &lt;?xml  version=&quot;1.0&quot; ?&gt; <br />
+  &lt;!DOCTYPE  plugin PUBLIC &quot;-//JPF//Java  Plug-in Manifest 1.0&quot; &quot;http://jpf.sourceforge.net/plugin_1_0.dtd&quot;&gt; <br />
+&lt;plugin id=&quot;com.wuxuehong.plugin.FAG-EC&quot; version=&quot;1.0.0&quot; <br />
+class=&quot;com.wuxuehong.plugin.SecondPlugin&quot;&gt; <br />
+&lt;runtime&gt; <br />
+&lt;library id=&quot;FAG-EC&quot; path=&quot;/&quot; type=&quot;code&quot;/&gt; <br />
+&lt;/runtime&gt; <br />
+&lt;/plugin&gt; <br />
+</p>
+<h4><br />
+  (3),Bundle the file</h4>
+<p><br />
+  <span class="STYLE1">Get a jar file contains the class files and plugin.xml 。</span><br />
+</p>
+<p>&nbsp;</p>
+</body>
+</html>

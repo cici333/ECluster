@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<plugin id="com.wuxuehong.plugin.compare" version="1.0.0"
+	class="comparision_with_known_compexes.Comparision">
+	<runtime>
+		<library id="compare" path="/" type="code"/>
+	</runtime>
+ <extension
+       id="product"
+       point="org.eclipse.core.runtime.products">
+    <product
+          application="ClusterE.application"
+          name="C-DEVA">
+       <property
+             name="windowImages"
+             value="icons/alt_window_16.gif,icons/alt_window_32.gif,icons/alt_window_48.gif,icons/alt_window_64.gif,icons/alt_window_128.gif">
+       </property>
+       <property
+             name="aboutText"
+             value="C-DEVA (An analysis platform for Clusters of biological networks Detection, Evaluation, Visualization and Annotation)&#x0A;is designed by YuTang and Xuehong Wu from Central Souoth University.  &#x0A;If you any problems or suggestions of C-DEVA, please contact us at Email: tangyu333@gmail.com.">
+       </property>
+       <property
+             name="aboutImage"
+             value="icons/alt_about.gif">
+       </property>
+       <property
+             name="startupForegroundColor"
+             value="000000">
+       </property>
+       <property
+             name="startupProgressRect"
+             value="0,330,500,18">
+       </property>
+       <property
+             name="startupMessageRect"
+             value="7,310,445,20">
+       </property>
+       <property
+             name="preferenceCustomization"
+             value="plugin_customization.ini">
+       </property>
+       <property
+             name="appName"
+             value="C-DEVA">
+       </property>
+    </product>
+ </extension>
+</plugin>
