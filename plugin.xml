@@ -113,18 +113,18 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="ClusterE.application"
-            name="ClusterE">
+            name="C-DEVA">
          <property
                name="windowImages"
-               value="icons/alt_window_16.gif">
+               value="icons/alt_window_16.gif,icons/alt_window_32.gif,icons/alt_window_48.gif,icons/alt_window_64.gif,icons/alt_window_128.gif">
          </property>
          <property
                name="aboutText"
-               value="ClusterE(An analysis platform for clustering in protein interaction networks)&#x0A;Build id:20100512&#x0A;(c) Copyright Central Souoth University  wuxuehong">
+               value="C-DEVA (An analysis platform for Clusters of biological networks Detection, Evaluation, Visualization and Annotation)&#x0A;is designed by YuTang and Xuehong Wu from Central Souoth University.  &#x0A;If you any problems or suggestions of C-DEVA, please contact us at Email: tangyu333@gmail.com.">
          </property>
          <property
                name="aboutImage"
-               value="icons/alt_window_32.gif">
+               value="icons/alt_about.gif">
          </property>
          <property
                name="startupForegroundColor"
@@ -140,7 +140,7 @@
          </property>
          <property
                name="appName"
-               value="ClusterE">
+               value="C-DEVA">
          </property>
          <property
                name="preferenceCustomization"

@@ -1,6 +1,7 @@
 package clustere.editors;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -221,10 +222,17 @@ public class ClusterEditor extends EditorPart {
 			chooseNode(node);
 		}
 	}
-	public String getString(Vector<Node> nei){
+	/**
+	 * @author TangYu
+	 * @modify_date: 2014年9月1日 下午3:36:23
+	 * @param neighbors
+	 * @return
+	 */
+	public String getString(Set<Node> neighbors){
 		String result = "";
-		for(int i=0;i<nei.size();i++)
-			result += nei.get(i).getNodeID()+" ";
+		for(Node n : neighbors){
+			result += n.getNodeID();
+		}
 		return result;
 	}
 	/**

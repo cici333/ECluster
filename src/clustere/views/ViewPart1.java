@@ -126,8 +126,11 @@ public class ViewPart1 extends ViewPart {
 		        	   node.setExpand_paramater(1);
 		        	   Paramater.SEPARATE_NODE = node;
 		        	   tempNodes.add(node);
-		        	   for(int i=0;i<node.getNeighbour_NUM();i++){
-		        		   Node n = node.getNeighbours().get(i);
+		        	   /**
+		        	    * @author TangYu
+		        	    * @modifydate: 2014年9月1日 下午3:37:55
+		        	    */
+		        	   for(Node n : node.getNeighbours()){
 		        		   n.setExpand_paramater(1);//还原尺寸
 		        		   tempNodes.add(n);
 		        		   tempEdges.add(new Edge(node,n));

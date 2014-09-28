@@ -136,7 +136,10 @@ public class OpenFileAction extends Action {
     	workbenchpage.closeAllEditors(true);
 	}
 	/**
-	 * 读取蛋白质网络文件  .txt
+	 *@author TangYu
+	 *@modify_date: 2014年9月1日 下午4:25:50
+	 *@description: import protein interaction network file(.txt)
+	 * 
 	 */
 	public void openTextFile(){
 		if(GraphInfo.nodelist.size()!=0||ViewPart1.list.size()!=0||Paramater.algorithmsResults.size()!=0){
@@ -172,86 +175,60 @@ public class OpenFileAction extends Action {
 		int i = 0, j = 0;
 		try {
 			str = br.readLine();
-			
 			while (str != null) {
 				i++;
-				System.out.println(i+"   ########");
 				str = str.toUpperCase();
 				s = new Scanner(str);
-/*
+				if(s.hasNext()){
 					tempstr1 = s.next(); // 第一个节点
-					tempnode1 = new Node(tempstr1);
-					if (GraphInfo.nodemap.get(tempstr1) == null) {
-						GraphInfo.nodemap.put(tempstr1, tempnode1);
-						GraphInfo.nodelist.add(tempnode1);
-					} else
-						tempnode1 = GraphInfo.nodemap.get(tempstr1);
-					tempstr2 = s.next(); // 第二个节点
-					tempnode2 = new Node(tempstr2);
-					if (GraphInfo.nodemap.get(tempstr2) == null) {
-						GraphInfo.nodemap.put(tempstr2, tempnode2);
-						GraphInfo.nodelist.add(tempnode2);
-					} else
-						tempnode2 = GraphInfo.nodemap.get(tempstr2);
-					tempedge = new Edge(tempnode1, tempnode2);
 					if(s.hasNext()){
-						double degree = s.nextDouble();
-						tempedge.setWeight(degree);
-					}
-					if ((GraphInfo.edgemap.get(tempstr2 + tempstr1) == null)
-							&& (GraphInfo.edgemap.get(tempstr1 + tempstr2) == null)) {
-						GraphInfo.edgemap.put(tempstr2 + tempstr1, tempedge);
-						GraphInfo.edgemap.put(tempstr1 + tempstr2, tempedge);
-						GraphInfo.edgelist.add(tempedge);
-						System.out.println(++j +"   ");
-						tempnode1.getNeighbours().add(tempnode2);
-						tempnode2.getNeighbours().add(tempnode1);
-					}
-*/
-				tempstr1 = s.next(); // 第一个节点
-				tempstr2 = s.next(); // 第二个节点
-				if(tempstr1.equals(tempstr2)){
-					tempnode1 = new Node(tempstr1);
-					if (!GraphInfo.nodemap.containsKey(tempstr1)) {
+						tempstr2 = s.next(); // 第二个节点
+						if(!tempstr1.isEmpty() && !tempstr2.isEmpty()){
+							if(tempstr1.equals(tempstr2)){
+								if(!GraphInfo.nodemap.containsKey(tempstr1)){
+									tempnode1 = new Node(tempstr1);
+									GraphInfo.nodemap.put(tempstr1, tempnode1);
+									GraphInfo.nodelist.add(tempnode1);						
+								}else{
+									tempnode1 = GraphInfo.nodemap.get(tempstr1);						
+								}
+								tempnode1.getNeighbours().add(tempnode1);
+								tempedge = new Edge(tempnode1, tempnode1);
+								
+							}else{
+								if(!GraphInfo.nodemap.containsKey(tempstr1)){
+									tempnode1 = new Node(tempstr1);
+									GraphInfo.nodemap.put(tempstr1, tempnode1);
+									GraphInfo.nodelist.add(tempnode1);						
+								}else{
+									tempnode1 = GraphInfo.nodemap.get(tempstr1);						
+								}
+								if(!GraphInfo.nodemap.containsKey(tempstr2)){
+									tempnode2 = new Node(tempstr2);
+									GraphInfo.nodemap.put(tempstr2, tempnode2);
+									GraphInfo.nodelist.add(tempnode2);		
+								}else{
+									tempnode2 = GraphInfo.nodemap.get(tempstr2);						
+								}
+								tempnode1.getNeighbours().add(tempnode2);						
+								tempnode2.getNeighbours().add(tempnode1);
+								tempedge = new Edge(tempnode1, tempnode2);
+							}
+							GraphInfo.edgelist.add(tempedge);
+							tempnode1.AddAdjacentEdges(tempedge);
+						}
+					}else if(!tempstr1.isEmpty() && !GraphInfo.nodemap.containsKey(tempstr1)){
+						tempnode1 = new Node(tempstr1);
 						GraphInfo.nodemap.put(tempstr1, tempnode1);
-						GraphInfo.nodelist.add(tempnode1);
-					} 
-					
-					
-				}else{
-					tempnode1 = new Node(tempstr1);
-					if (GraphInfo.nodemap.get(tempstr1) == null) {
-						GraphInfo.nodemap.put(tempstr1, tempnode1);
-						GraphInfo.nodelist.add(tempnode1);
-					} else
-						tempnode1 = GraphInfo.nodemap.get(tempstr1);
-					
-					tempnode2 = new Node(tempstr2);
-					if (GraphInfo.nodemap.get(tempstr2) == null) {
-						GraphInfo.nodemap.put(tempstr2, tempnode2);
-						GraphInfo.nodelist.add(tempnode2);
-					} else
-						tempnode2 = GraphInfo.nodemap.get(tempstr2);
-					tempedge = new Edge(tempnode1, tempnode2);
-					if(s.hasNext()){
-						double degree = s.nextDouble();
-						tempedge.setWeight(degree);
+						GraphInfo.nodelist.add(tempnode1);											
 					}
-			//		if ((GraphInfo.edgemap.get(tempstr2 + tempstr1) == null)
-			//				&& (GraphInfo.edgemap.get(tempstr1 + tempstr2) == null)) {
-			//			GraphInfo.edgemap.put(tempstr2 + tempstr1, tempedge);
-			//			GraphInfo.edgemap.put(tempstr1 + tempstr2, tempedge);
-						GraphInfo.edgelist.add(tempedge);
-						System.out.println(++j +"   ");
-						tempnode1.getNeighbours().add(tempnode2);
-						tempnode2.getNeighbours().add(tempnode1);
-				//	}
 				}
+				
+				
 				
 				str = br.readLine();
 			}
 			br.close();
-	System.out.println(GraphInfo.edgelist.size()+"$$$");
 	
 		} catch (Exception e) {
 		 MessageDialog.openError(null, "ERROE", "File read exception at Line"+ i +"!");
@@ -317,12 +294,52 @@ public class OpenFileAction extends Action {
 		rootElement.setNodes(rootNodes);
 		int size = Integer.parseInt(str.substring(index2+1, str.length()));
 		rootElement.setName(algorithmName+"("+size+")");
+		
+		
+		/*Read network*/
+		str = br.readLine();
+		str = br.readLine();
+		Scanner s;
+		String tempstr1;
+		String tempstr2;
+		Node tempnode1;
+		Node tempnode2;
+		Edge tempedge;
+		while (str != null) {
+			if(str.startsWith("*******"))break;
+			str = str.toUpperCase();
+			s = new Scanner(str);
+			while (s.hasNext()) {
+			
+				tempstr1 = s.next(); // 第一个节点
+				tempnode1 = new Node(tempstr1);
+				if (GraphInfo.nodemap.get(tempstr1) == null) {
+					GraphInfo.nodemap.put(tempstr1, tempnode1);
+					GraphInfo.nodelist.add(tempnode1);
+				} else
+					tempnode1 = GraphInfo.nodemap.get(tempstr1);
+				tempstr2 = s.next(); // 第二个节点
+				tempnode2 = new Node(tempstr2);
+				if (GraphInfo.nodemap.get(tempstr2) == null) {
+					GraphInfo.nodemap.put(tempstr2, tempnode2);
+					GraphInfo.nodelist.add(tempnode2);
+				} else
+					tempnode2 = GraphInfo.nodemap.get(tempstr2);
+				tempedge = new Edge(tempnode1, tempnode2);
+					GraphInfo.edgelist.add(tempedge);
+					tempnode1.getNeighbours().add(tempnode2);
+					tempnode2.getNeighbours().add(tempnode1);
+		//		}
+				break;
+			}
+			str = br.readLine();
+		}
+		/*Read Clusters*/
 		v = new Vector[size];
 		int index = -1;
 		str = br.readLine();
-		str = br.readLine();
 		while(str!=null){
-			if(str.startsWith("*******"))break;
+			
 			if(str.startsWith("Cluster:")){
 				index++;
 				v[index] = new Vector();
@@ -348,6 +365,7 @@ public class OpenFileAction extends Action {
 				temp.setScope(scope);
 				childElement.setName(s1+"("+scope+")");
 				while(scanner.hasNext()){
+					System.out.println("ZZZZZZZZZZZ");
 					String nodeID = scanner.next();
 					Node n1;
 					if(rootNodesMap.get(nodeID)!=null){
@@ -357,6 +375,7 @@ public class OpenFileAction extends Action {
 						rootNodes.add(n1);
 						rootNodesMap.put(nodeID, n1);
 					}
+									
 					if(rootMap.get(temp.getNodeID()+n1.getNodeID())==null){
 						Edge edge = new Edge(temp,n1);
 						temp.getNeighbours().add(n1);
@@ -365,7 +384,9 @@ public class OpenFileAction extends Action {
 						rootMap.put(temp.getNodeID()+n1.getNodeID(), edge);
 						rootMap.put(n1.getNodeID()+temp.getNodeID(), edge);
 					}
+				
 				}
+								
 			}else{
 				scanner = new Scanner(str);
 				String str1 = scanner.next();
@@ -378,6 +399,7 @@ public class OpenFileAction extends Action {
 					v[index].add(nn1);
 				}
 				while(scanner.hasNext()){
+					System.out.println("TTTTTTTTTT");
 					String id = scanner.next();
 					Node nn2;
 					if(tempNodesMap.get(id)!=null){
@@ -387,6 +409,7 @@ public class OpenFileAction extends Action {
 						tempNodesMap.put(id, nn2);
 						v[index].add(nn2);
 					}
+					
 					if(edgeMap.get(nn1.getNodeID()+nn2.getNodeID())==null){
 						Edge edge = new Edge(nn1,nn2);
 						nn1.getNeighbours().add(nn2);
@@ -399,45 +422,8 @@ public class OpenFileAction extends Action {
 			}
 			str = br.readLine();
 		}
-		str = br.readLine();
-		Scanner s;
-		String tempstr1;
-		String tempstr2;
-		Node tempnode1;
-		Node tempnode2;
-		Edge tempedge;
-		while (str != null) {               //读取原始网络文件
-			str = str.toUpperCase();
-			s = new Scanner(str);
-			while (s.hasNext()) {
-			
-				tempstr1 = s.next(); // 第一个节点
-				tempnode1 = new Node(tempstr1);
-				if (GraphInfo.nodemap.get(tempstr1) == null) {
-					GraphInfo.nodemap.put(tempstr1, tempnode1);
-					GraphInfo.nodelist.add(tempnode1);
-				} else
-					tempnode1 = GraphInfo.nodemap.get(tempstr1);
-				tempstr2 = s.next(); // 第二个节点
-				tempnode2 = new Node(tempstr2);
-				if (GraphInfo.nodemap.get(tempstr2) == null) {
-					GraphInfo.nodemap.put(tempstr2, tempnode2);
-					GraphInfo.nodelist.add(tempnode2);
-				} else
-					tempnode2 = GraphInfo.nodemap.get(tempstr2);
-				tempedge = new Edge(tempnode1, tempnode2);
-		//		if ((GraphInfo.edgemap.get(tempstr2 + tempstr1) == null)
-		//				&& (GraphInfo.edgemap.get(tempstr1 + tempstr2) == null)) {
-		//			GraphInfo.edgemap.put(tempstr2 + tempstr1, tempedge);
-		//			GraphInfo.edgemap.put(tempstr1 + tempstr2, tempedge);
-					GraphInfo.edgelist.add(tempedge);
-					tempnode1.getNeighbours().add(tempnode2);
-					tempnode2.getNeighbours().add(tempnode1);
-		//		}
-				break;
-			}
-			str = br.readLine();
-		}
+		
+
 		br.close();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -556,28 +542,27 @@ public class OpenFileAction extends Action {
 						tempstr1 = s.next(); // 第一个节点
 						
 						tempnode1 = new Node(tempstr1);
-					//	if (GraphInfo.nodemap.get(tempstr1) == null) {
-						if (GraphInfo.nodemap.containsKey(tempstr1)) {
+						if (!GraphInfo.nodemap.containsKey(tempstr1)) {
 							GraphInfo.nodemap.put(tempstr1, tempnode1);
 							GraphInfo.nodelist.add(tempnode1);
-						} else
+						} else{
 							tempnode1 = GraphInfo.nodemap.get(tempstr1);
+						}
+						
 						tempstr2 = s.next(); // 第二个节点
 						
 						tempnode2 = new Node(tempstr2);
-						if (GraphInfo.nodemap.containsKey(tempstr2)) {
+						if (!GraphInfo.nodemap.containsKey(tempstr2)) {
 							GraphInfo.nodemap.put(tempstr2, tempnode2);
 							GraphInfo.nodelist.add(tempnode2);
-						} else
+						} else{
 							tempnode2 = GraphInfo.nodemap.get(tempstr2);
+						}
 						tempedge = new Edge(tempnode1, tempnode2);
-				//		if ((GraphInfo.edgemap.get(tempstr2 + tempstr1) == null)
-				//				&& (GraphInfo.edgemap.get(tempstr1 + tempstr2) == null)) {
-				//			GraphInfo.edgemap.put(tempstr2 + tempstr1, tempedge);
-				//			GraphInfo.edgemap.put(tempstr1 + tempstr2, tempedge);
-							GraphInfo.edgelist.add(tempedge);
-							tempnode1.getNeighbours().add(tempnode2);
-							tempnode2.getNeighbours().add(tempnode1);
+
+						GraphInfo.edgelist.add(tempedge);
+						tempnode1.getNeighbours().add(tempnode2);
+						tempnode2.getNeighbours().add(tempnode1);
 			//			}
 				//		break;
 					}

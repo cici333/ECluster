@@ -1,6 +1,8 @@
 package com.wuxuehong.bean;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import org.eclipse.swt.SWT;
@@ -24,10 +26,12 @@ public class Node implements Serializable {
 	private String NodeID = null;
 	private int mx = 0;
 	private int my = 0;
-	private Vector<Node> neighbours = new Vector<Node>();
+	private HashSet<Node> neighbours = new HashSet<Node>();
+	private HashSet<Edge> adjacentEdges = new HashSet<Edge>(); //adjacent edge set(directed)
 	private float expand_paramater = 1;
 	private int scope = 1;         //节点规模       一般蛋白质节点规模为一   而当一个簇作为一个节点的时候规模就>=1
 	private float v_scope = 1;
+
 	
 
 	public Node(String NodeID) {
@@ -64,12 +68,22 @@ public class Node implements Serializable {
 		this.my = my;
 	}
 
-	public Vector<Node> getNeighbours() {
+	public HashSet<Node> getNeighbours() {
 		return neighbours;
 	}
 
-	public void setNeighbours(Vector<Node> neighbours) {
+	public void setNeighbours(HashSet<Node> neighbours) {
 		this.neighbours = neighbours;
+	}
+
+	
+	
+	public HashSet<Edge> getAdjacentEdges() {
+		return adjacentEdges;
+	}
+
+	public void AddAdjacentEdges(Edge edge) {
+		this.adjacentEdges.add(edge);
 	}
 
 	public int getNeighbour_NUM() {
@@ -80,13 +94,14 @@ public class Node implements Serializable {
 		int WIDTH = (int) (v_scope*Paramater.NODE_SIZE / expand_paramater);
 //		int ds = Paramater.LINE_WIDTH/2;？
 		int  ds = 1;
-		if (Paramater.IS_SHOWNAME){
-			gc.drawString(NodeID, mx - WIDTH / 2, my - WIDTH / 4 - getFontSize()*2, true);
-		}
 		if (Paramater.IS_SHOWNODE) {
 			gc.fillOval(mx - WIDTH / 2, my - WIDTH / 2, WIDTH, WIDTH);
 			gc.drawOval(mx - WIDTH / 2-ds, my - WIDTH / 2-ds, WIDTH, WIDTH);
 		}
+		if (Paramater.IS_SHOWNAME){
+			gc.drawString(NodeID, mx - WIDTH / 2, my - WIDTH / 4 - getFontSize()*2, true);
+		}
+
 	}
 
 	public Rectangle getRectangle() {

@@ -221,10 +221,14 @@ System.out.println(v.size()+"**************************");
 		    calno.addAll(no.getNeighbours());
 			calno.removeAll(all);
 			cal(calno, no);
-			for (int i = 0; i < no.getNeighbour_NUM(); i++) {
-				Node tempn = no.getNeighbours().get(i);
-				if (!all.contains(tempn))
-					list.add(tempn);
+			/**
+			 * @author TangYu
+			 * @date: 2014年9月1日 下午3:36:02
+			 */
+			for(Node n : no.getNeighbours()){
+				if(!all.contains(n)){
+					list.add(n);
+				}
 			}
 			all.addAll(calno);
 		}

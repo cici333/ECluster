@@ -26,6 +26,9 @@ import org.eclipse.ui.IWorkbenchPage;
 
 
 
+
+import org.eclipse.ui.internal.expressions.AndExpression;
+
 import clustere.Activator;
 import clustere.dialogs.AlgorithmSetDialog;
 import clustere.dialogs.ProgressBarDialog;
@@ -168,14 +171,26 @@ public class PluginAlgorithmAction extends Action{
 		Paramater.algorithmsResults.put(name, v);
 		HashMap<String,Node> tempMap = new HashMap<String,Node>();
 		TreeElement parentElement = new TreeElement(name+"("+v.length+")");
-		for(int i=0;i<v.length;i++){
-			Vector<Node> temp = v[i];
-			Vector<Node> addNodes = new Vector<Node>();
-			TreeElement te = new TreeElement("Cluster:"+i+"("+v[i].size()+")");
+		int i=0;
+		int nodeSum = 0;
+		for(Vector<Node> addNodes : v){
+			nodeSum += addNodes.size();
+			//Vector<Node> temp = v[i];			
+			//Vector<Node> addNodes = new Vector<Node>();
+		//	Vector<Node> addNodes = new Vector<Node>(v[i]);
+			TreeElement te = new TreeElement("Cluster:"+ i +"("+addNodes.size()+")");
 			Vector<Edge> tempedge = new Vector<Edge>();
 			
-			for(int j=0;j<temp.size();j++)addNodes.add(new Node(temp.get(j).getNodeID()));
-			
+		//	for(int j=0;j<temp.size();j++)
+				
+			for (Node node : addNodes){ 				  			    	 
+		    	 for(Edge adjacentEdge : node.getAdjacentEdges()){
+		    		 if(addNodes.contains(adjacentEdge.getNode2())){	    			 
+		    			 tempedge.add(adjacentEdge);		    			
+		    		 }
+		    	 }   	     
+			   }
+			/*
 			for(int j=0;j<addNodes.size();j++){
 				 Node n1 = addNodes.get(j);
 				for(int k=j+1;k<addNodes.size();k++){
@@ -188,15 +203,17 @@ public class PluginAlgorithmAction extends Action{
 					}
 				}
 			}
-			String str = "Cluster"+i;
+			*/
+			String str = "Cluster"+ i++;
 			Node node = new Node(str);
-			node.setScope(v[i].size());
+			node.setScope(addNodes.size());
 			tempMap.put(str, node);
 			te.setNode(node);
 			te.setNodes(addNodes);
 			te.setEdges(tempedge);
 			parentElement.addChild(te);
 		}
+		System.out.println(nodeSum+"$$$");
 		calOvalap(v, parentElement,tempMap);      //计算簇之间的交叠情况
 		ViewPart1.list.add(parentElement);
 	}
@@ -210,6 +227,7 @@ public class PluginAlgorithmAction extends Action{
 			for(int j=i+1;j<v.length;j++){
 				Vector<Node> v2 = v[j];
 				if(CheckOvalap(v1,v2)){
+					System.out.println(i+" ###### "+j);
 					Node node1 = tempMap.get("Cluster"+i);
 					Node node2 = tempMap.get("Cluster"+j);
 					node1.getNeighbours().add(node2);
@@ -227,6 +245,7 @@ public class PluginAlgorithmAction extends Action{
 		for(int i=0;i<v1.size();i++){
 			Node n1 = v1.get(i);
 			if(v2.contains(n1)){
+				System.out.println(n1.getNodeID());
 				System.out.println("*************");
 				return true;
 			}

@@ -7,6 +7,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 
 import com.wuxuehong.bean.Paramater;
+import com.wuxuehong.interfaces.GraphInfo;
 
 
 public class Edge implements Serializable {
@@ -14,10 +15,12 @@ public class Edge implements Serializable {
 	private Node node1;
 	private Node node2;
 	private double weight = 1;
-
+	private int edgeId; 
+	
 	public Edge(Node node1, Node node2) {
 		this.node1 = node1;
 		this.node2 = node2;
+		this.edgeId = ++GraphInfo.EDGE_ID;
 	}
 
 	public Node getNode1() {

@@ -23,6 +23,8 @@ public class GraphInfo {
 	public static Vector<Edge> edgelist = new Vector<Edge>();
 	//用于当获取随机网络时  保存原始网络边信息
 	public static Vector<Edge> tempEdges = new Vector<Edge>();  
+	
+	public static int EDGE_ID = -1;
 
 	public static void refresh(){
 		nodemap.clear();
@@ -30,6 +32,8 @@ public class GraphInfo {
 		nodelist.clear();
 		edgelist.clear();
 		tempEdges.clear();
+		EDGE_ID = -1;
 	}
+	
 	
 }
