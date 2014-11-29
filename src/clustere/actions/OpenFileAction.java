@@ -100,7 +100,7 @@ public class OpenFileAction extends Action {
 				item2.setText("&Clusters");
 				item2.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {
-//						openExistClusters();
+	//					openExistClusters();
 						openSavedFile();
 					}
 				});
@@ -247,8 +247,6 @@ public class OpenFileAction extends Action {
 		 NetworkView editor = null;
 		try {
 			editor = (NetworkView)workbenchPage.openEditor(editorInput, editorID);
-//			editor.setRedraw(GraphInfo.nodelist,GraphInfo.edgelist);
-//			System.out.println("going1111111111");
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}
@@ -257,6 +255,7 @@ public class OpenFileAction extends Action {
 	/**
 	 * 打开保存的文件
 	 */
+	/*
 	public void openExistClusters(){
 		if(GraphInfo.nodelist.size()!=0||ViewPart1.list.size()!=0||Paramater.algorithmsResults.size()!=0){
 			   boolean confirm = MessageDialog.openConfirm(new Shell(), "Warning", "A file has been inputed,Do you really want to open a new ?");
@@ -297,6 +296,7 @@ public class OpenFileAction extends Action {
 		
 		
 		/*Read network*/
+	/*
 		str = br.readLine();
 		str = br.readLine();
 		Scanner s;
@@ -335,11 +335,12 @@ public class OpenFileAction extends Action {
 			str = br.readLine();
 		}
 		/*Read Clusters*/
+	/*
 		v = new Vector[size];
 		int index = -1;
 		str = br.readLine();
 		while(str!=null){
-			
+			System.out.println("UUUUU");	
 			if(str.startsWith("Cluster:")){
 				index++;
 				v[index] = new Vector();
@@ -506,68 +507,70 @@ public class OpenFileAction extends Action {
 			algorithmName = str.substring(0,index1);
 			int size = Integer.parseInt(str.substring(index1+1, str.length()));
 			 v = new Vector[size];
-			 System.out.println(size);
+
 			str = br.readLine();
 		//	str = br.readLine();
-			HashMap<String ,Node> nodemap = new HashMap<String,Node>();
-			int index = -1;
-			while(str!=null){
-				if(str.startsWith("******"))break;
-				if(str.startsWith("Cluster:")){
-					index ++;
-					v[index] = new Vector<Node>();
-				}else{
-					str = str.trim();
-					Node n = nodemap.get(str);
-					if(n==null){
-						n = new Node(str);
-						nodemap.put(str, n);
-					}
-					
-					v[index].add(n);
-					
-				}
-				str = br.readLine();
-			}
 			Scanner s  = null;
 			String tempstr1,tempstr2;
 			Node tempnode1,tempnode2;
 			Edge tempedge;
+			while (str != null) {               //读取原始网络文件
+				if(str.startsWith("******"))break;
+				str = str.toUpperCase();
+				s = new Scanner(str);
+				while (s.hasNext()) {
+					
+					tempstr1 = s.next(); // 第一个节点
+					
+					tempnode1 = new Node(tempstr1);
+					if (!GraphInfo.nodemap.containsKey(tempstr1)) {
+						GraphInfo.nodemap.put(tempstr1, tempnode1);
+						GraphInfo.nodelist.add(tempnode1);
+					} else{
+						tempnode1 = GraphInfo.nodemap.get(tempstr1);
+					}
+					
+					tempstr2 = s.next(); // 第二个节点
+					
+					tempnode2 = new Node(tempstr2);
+					if (!GraphInfo.nodemap.containsKey(tempstr2)) {
+						GraphInfo.nodemap.put(tempstr2, tempnode2);
+						GraphInfo.nodelist.add(tempnode2);
+					} else{
+						tempnode2 = GraphInfo.nodemap.get(tempstr2);
+					}
+					tempedge = new Edge(tempnode1, tempnode2);
+
+					GraphInfo.edgelist.add(tempedge);
+					tempnode1.getNeighbours().add(tempnode2);
+					tempnode2.getNeighbours().add(tempnode1);
+		//			}
+			//		break;
+				}
+				str = br.readLine();
+			}
+			
+			HashMap<String ,Node> nodemap = new HashMap<String,Node>();
+			int index = -1;			
 			if(str!=null&&str.startsWith("******")){
 				str = br.readLine();
-				while (str != null) {               //读取原始网络文件
-					str = str.toUpperCase();
-					s = new Scanner(str);
-					while (s.hasNext()) {
-						tempstr1 = s.next(); // 第一个节点
-						
-						tempnode1 = new Node(tempstr1);
-						if (!GraphInfo.nodemap.containsKey(tempstr1)) {
-							GraphInfo.nodemap.put(tempstr1, tempnode1);
-							GraphInfo.nodelist.add(tempnode1);
-						} else{
-							tempnode1 = GraphInfo.nodemap.get(tempstr1);
-						}
-						
-						tempstr2 = s.next(); // 第二个节点
-						
-						tempnode2 = new Node(tempstr2);
-						if (!GraphInfo.nodemap.containsKey(tempstr2)) {
-							GraphInfo.nodemap.put(tempstr2, tempnode2);
-							GraphInfo.nodelist.add(tempnode2);
-						} else{
-							tempnode2 = GraphInfo.nodemap.get(tempstr2);
-						}
-						tempedge = new Edge(tempnode1, tempnode2);
-
-						GraphInfo.edgelist.add(tempedge);
-						tempnode1.getNeighbours().add(tempnode2);
-						tempnode2.getNeighbours().add(tempnode1);
-			//			}
-				//		break;
+				while(str!=null){
+					
+					if(str.startsWith("Cluster:")){
+						index ++;
+						v[index] = new Vector<Node>();
+					}else{
+						str = str.trim();
+						Node n = nodemap.get(str);
+						if(n==null){
+							n = new Node(str);
+							nodemap.put(str, n);
+						}						
+						v[index].add(n);					
 					}
 					str = br.readLine();
 				}
+
 			}
 		}catch(Exception e){
 			e.printStackTrace();

@@ -96,8 +96,7 @@ public class CommonInfo extends Plugin implements NewAlgorithm{
 			Vector v1 = v[i];
 			edgecount = 0;
 			density = 0;
-			for (int j = 0; j < v1.size(); j++) {
-				Node n1 = (Node) v1.get(j);
+			for (Node n1 : v1.size()) {			
 				for (int k = j + 1; k < v1.size(); k++) {
 					Node n2 = (Node) v1.get(k);
 					if (GraphInfo.edgemap.get(n1.getNodeID() + n2.getNodeID()) != null) {
