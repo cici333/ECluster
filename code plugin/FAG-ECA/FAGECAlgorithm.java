@@ -194,6 +194,7 @@ public class FAGECAlgorithm implements Algorithm {
         for (int c = 0; c < complexes.length; c++) {
         	complexes[c] = (Complex) alComplexes.get(c);
         }
+        /*
         System.out.println("Complex length:"+complexes.length);
 		for(i=0;i<complexes.length;i++){
 			System.out.println("Complex "+i+" ");
@@ -206,6 +207,7 @@ public class FAGECAlgorithm implements Algorithm {
 			}
 			System.out.println("");
 		}
+		*/
 		return complexes;
 		
 	}

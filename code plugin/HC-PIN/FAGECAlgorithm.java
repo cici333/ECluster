@@ -83,7 +83,7 @@ public class FAGECAlgorithm implements Algorithm {
 //weight=(double)(common)/(double)min;
 //HC-PIN
  weight = (double)(total_common_first*total_common_second)/(double)(total_first*total_second);
- System.out.println(weight+"^^^^^^^^^^^^^^^^^"+((NetNode)(inputNetwork.getAlNodes().get(nTo))).getIdentifier()+"^^^^^^^^^^^^^^^^^^^"+((NetNode)(inputNetwork.getAlNodes().get(nFrom))).getIdentifier()+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+common+"&&"+commonIndex.size());
+
     		
     		//add to the edge weights map
     		if(edgeWeightsMap.containsKey(new Double(weight))) {

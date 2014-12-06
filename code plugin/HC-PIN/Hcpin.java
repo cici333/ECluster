@@ -116,7 +116,8 @@ public class Hcpin extends Plugin implements NewAlgorithm{
 			network.setAlNodes(alNodes);
 			network.setAlArcs(alArcs);
 			network.setWeights(weights);
-		if(network==null) return null;
+			if(network==null) 
+				return null;
 		    complexes=alg.clustering(network);
 		    Vector[] v = new Vector[complexes.length];
 		    for(int i=0;i<complexes.length;i++){

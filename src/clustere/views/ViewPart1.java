@@ -112,9 +112,10 @@ public class ViewPart1 extends ViewPart {
 		           TreeElement treeElement = (TreeElement)((IStructuredSelection)seleciton).getFirstElement();
 		           ClusterEditor clusterEditor = (ClusterEditor)editor;
 		           List<Node> list = new ArrayList<Node>();
-		           if(Paramater.CLUSTER_SHOW_MODE==Paramater.CLUSTER){
-		        	   for(int i=0;i<treeElement.getNodes().size();i++)
+		           if(Paramater.CLUSTER_SHOW_MODE==Paramater.CLUSTER){		        	  
+		        	   for(int i=0;i<treeElement.getNodes().size();i++){
 		        		   treeElement.getNodes().get(i).setExpand_paramater(1);   //还原尺寸
+		        	   }
 		           clusterEditor.setRedraw(treeElement.getNodes(), treeElement.getEdges());//显示图形
 		           clusterEditor.setTableRefresh(treeElement.getNodes().size(), treeElement.getEdges().size());
 		           list.addAll(treeElement.getNodes());

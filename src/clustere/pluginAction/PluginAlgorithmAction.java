@@ -183,10 +183,12 @@ public class PluginAlgorithmAction extends Action{
 			
 		//	for(int j=0;j<temp.size();j++)
 				
-			for (Node node : addNodes){ 				  			    	 
-		    	 for(Edge adjacentEdge : node.getAdjacentEdges()){
+			for (Node node : addNodes){ 	
+				System.out.println("Add E 1...");
+		    	 for(Edge adjacentEdge : node.getAdjacentEdges()){		    		 
 		    		 if(addNodes.contains(adjacentEdge.getNode2())){	    			 
-		    			 tempedge.add(adjacentEdge);		    			
+		    			 tempedge.add(adjacentEdge);
+		    			 System.out.println("Add E 2...");
 		    		 }
 		    	 }   	     
 			   }
