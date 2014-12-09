@@ -120,7 +120,7 @@ public class PluginAlgorithmAction extends Action{
 				Display.getDefault().asyncExec(new Runnable(){
 					public void run() {
 						pbd.dispose();
-						MessageDialog.openError(new Shell(), "Error", "Paramater is not available...or no file input!");
+						MessageDialog.openError(new Shell(), "Error", "Parameter is not available...or no file input!");
 					}
 				});
 				return ;
@@ -184,11 +184,11 @@ public class PluginAlgorithmAction extends Action{
 		//	for(int j=0;j<temp.size();j++)
 				
 			for (Node node : addNodes){ 	
-				System.out.println("Add E 1...");
+//				System.out.println("Add E 1...");
 		    	 for(Edge adjacentEdge : node.getAdjacentEdges()){		    		 
 		    		 if(addNodes.contains(adjacentEdge.getNode2())){	    			 
 		    			 tempedge.add(adjacentEdge);
-		    			 System.out.println("Add E 2...");
+//		    			 System.out.println("Add E 2...");
 		    		 }
 		    	 }   	     
 			   }
@@ -215,7 +215,7 @@ public class PluginAlgorithmAction extends Action{
 			te.setEdges(tempedge);
 			parentElement.addChild(te);
 		}
-		System.out.println(nodeSum+"$$$");
+//		System.out.println(nodeSum+"$$$");
 		calOvalap(v, parentElement,tempMap);      //计算簇之间的交叠情况
 		ViewPart1.list.add(parentElement);
 	}
@@ -229,7 +229,7 @@ public class PluginAlgorithmAction extends Action{
 			for(int j=i+1;j<v.length;j++){
 				Vector<Node> v2 = v[j];
 				if(CheckOvalap(v1,v2)){
-					System.out.println(i+" ###### "+j);
+	//				System.out.println(i+" ###### "+j);
 					Node node1 = tempMap.get("Cluster"+i);
 					Node node2 = tempMap.get("Cluster"+j);
 					node1.getNeighbours().add(node2);
@@ -247,8 +247,8 @@ public class PluginAlgorithmAction extends Action{
 		for(int i=0;i<v1.size();i++){
 			Node n1 = v1.get(i);
 			if(v2.contains(n1)){
-				System.out.println(n1.getNodeID());
-				System.out.println("*************");
+	//			System.out.println(n1.getNodeID());
+	//			System.out.println("*************");
 				return true;
 			}
 		}

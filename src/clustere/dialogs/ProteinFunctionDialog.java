@@ -84,7 +84,7 @@ public class ProteinFunctionDialog extends org.eclipse.swt.widgets.Dialog {
 		super(parent, style);
 		open();
 	}
-	
+	/*
 	public String getString(Set<String> v){
 		if(v==null)return "";
 		StringBuffer str = new StringBuffer("");
@@ -95,7 +95,7 @@ public class ProteinFunctionDialog extends org.eclipse.swt.widgets.Dialog {
 		}
 		return str.toString();
 	}
-
+*/
 	public void open() {
 		try {
 			Shell parent = getParent();
@@ -149,13 +149,13 @@ public class ProteinFunctionDialog extends org.eclipse.swt.widgets.Dialog {
 					button7.addSelectionListener(new SelectionAdapter(){
 						public void widgetSelected(SelectionEvent e) {
 							if(button1.getSelection()){
-							  showDataSource(Paramater.proteinFunction);
+							  showDataSource(Paramater.proteinFunction, 0);
 							}else if(button2.getSelection()){
-								showDataSource(Paramater.goFuncitonAnnotation);
+								showDataSource(Paramater.goFuncitonAnnotation, 1);
 							}else if(button3.getSelection()){
-								showDataSource(Paramater.goProcessAnnotation);
+								showDataSource(Paramater.goProcessAnnotation, 1);
 							}else if(button4.getSelection()){
-								showDataSource(Paramater.goComponentAnnotation);
+								showDataSource(Paramater.goComponentAnnotation, 1);
 							}
 						}
 					});
@@ -224,13 +224,13 @@ public class ProteinFunctionDialog extends org.eclipse.swt.widgets.Dialog {
 					button8.addSelectionListener(new SelectionAdapter(){
 						public void widgetSelected(SelectionEvent e) {
 							if(button1.getSelection()){
-								  showCurrentProteins(Paramater.proteinFunction);
+								  showCurrentProteins(Paramater.proteinFunction, 0);
 								}else if(button2.getSelection()){
-									  showCurrentProteins(Paramater.goFuncitonAnnotation);
+									  showCurrentProteins(Paramater.goFuncitonAnnotation, 1);
 								}else if(button3.getSelection()){
-									  showCurrentProteins(Paramater.goProcessAnnotation);
+									  showCurrentProteins(Paramater.goProcessAnnotation, 1);
 								}else if(button4.getSelection()){
-									 showCurrentProteins(Paramater.goComponentAnnotation);
+									 showCurrentProteins(Paramater.goComponentAnnotation, 1);
 								}
 						}
 					});
@@ -252,13 +252,13 @@ public class ProteinFunctionDialog extends org.eclipse.swt.widgets.Dialog {
 					button10.addSelectionListener(new SelectionAdapter(){
 						public void widgetSelected(SelectionEvent e) {
 							if(button1.getSelection()){
-								  loadProteins(Paramater.proteinFunction);
+								  loadProteins(Paramater.proteinFunction, 0);
 								}else if(button2.getSelection()){
-									loadProteins(Paramater.goFuncitonAnnotation);
+									loadProteins(Paramater.goFuncitonAnnotation, 1);
 								}else if(button3.getSelection()){
-									loadProteins(Paramater.goProcessAnnotation);
+									loadProteins(Paramater.goProcessAnnotation, 1);
 								}else if(button4.getSelection()){
-									loadProteins(Paramater.goComponentAnnotation);
+									loadProteins(Paramater.goComponentAnnotation, 1);
 								}
 						}
 					});
@@ -331,14 +331,37 @@ public class ProteinFunctionDialog extends org.eclipse.swt.widgets.Dialog {
 	 * 显示蛋白质数据   蛋白质----功能代码 
 	 * @param result
 	 */
-	public void showDataSource(HashMap<String,Set<String>> result){
+	public void showDataSource(HashMap<String,Set<String>> result, int flag){
+		// flag = 0, MIPS;  flag = 1, GO;
 		Set keyset = result.keySet();
 		Iterator it = keyset.iterator();
 		table1.removeAll();
+		String str, temp = null;
+		Set<String> v;
+		StringBuffer functions;
 		while(it.hasNext()){
-			String str = (String)it.next();
-			Set<String>  v = result.get(str);
-			new TableItem(table1,SWT.LEFT).setText(new String[]{str,getString(v)});
+			str = (String)it.next();
+			functions = new StringBuffer("");
+			if((v = result.get(str)) != null){		   
+				if(flag == 0){
+					for(String fID : v){
+						temp = Paramater.functionAnnotation.get(fID);					
+						functions.append(temp+"; ");																
+					}
+				}else if(flag == 1){
+					for(String fID : v){
+						temp = Paramater.goGeneAnnotation.get(fID);											
+						functions.append(temp+"; ");																
+					}										
+				} 
+				if(temp != null){
+					TableItem ti = new TableItem(table1,SWT.LEFT);
+					ti.setText(0, str);
+					ti.setText(1, temp);					
+				}							
+			}
+			
+		//	new TableItem(table1,SWT.LEFT).setText(new String[]{str,getString(v)});
 		}
 		label3.setText("Total Item: "+table1.getItemCount());
 	}
@@ -347,13 +370,33 @@ public class ProteinFunctionDialog extends org.eclipse.swt.widgets.Dialog {
 	 * 显示当前蛋白质网络中 蛋白质注释信息
 	 * @param result
 	 */
-	public void showCurrentProteins(HashMap<String,Set<String>> result){
+	public void showCurrentProteins(HashMap<String,Set<String>> result, int flag){
 		table1.removeAll();
+		String str, temp = null;
+		Set<String> v;
+		StringBuffer functions;
 		for(int i=0;i<GraphInfo.nodelist.size();i++){
-			String str = GraphInfo.nodelist.get(i).getNodeID();
-			Set<String> v = null;
-			v = result.get(str);
-			new TableItem(table1,SWT.LEFT).setText(new String[]{str,getString(v)});
+			str = GraphInfo.nodelist.get(i).getNodeID();
+			functions = new StringBuffer("");
+			if((v = result.get(str)) != null){		   
+				if(flag == 0){
+					for(String fID : v){
+						temp = Paramater.functionAnnotation.get(fID);					
+						functions.append(temp+"; ");																
+					}
+				}else if(flag == 1){
+					for(String fID : v){
+						temp = Paramater.goGeneAnnotation.get(fID);											
+						functions.append(temp+"; ");																
+					}										
+				} 
+				if(temp != null){
+					TableItem ti = new TableItem(table1,SWT.LEFT);
+					ti.setText(0, str);
+					ti.setText(1, temp);					
+				}							
+			}
+	//		new TableItem(table1,SWT.LEFT).setText(new String[]{str,getString(v)});
 		}
 		label3.setText("Total Item: "+table1.getItemCount());
 	}
@@ -362,7 +405,7 @@ public class ProteinFunctionDialog extends org.eclipse.swt.widgets.Dialog {
 	/**
 	 * 加载蛋白质  并显示信息
 	 */
-	public void loadProteins(HashMap<String,Set<String>> result){
+	public void loadProteins(HashMap<String,Set<String>> result, int flag){
 		FileDialog fd = new FileDialog(dialogShell,SWT.OPEN);
 		fd.setText("Load Proteins");
 		fd.setFilterExtensions(new String[]{"*.txt","*"});
@@ -388,11 +431,32 @@ public class ProteinFunctionDialog extends org.eclipse.swt.widgets.Dialog {
 		}
 	   Iterator it = proteins.iterator();
 	   table1.removeAll();
+		String str, temp = null;
+		Set<String> v;
+		StringBuffer functions;
 	   while(it.hasNext()){
-		   String s = (String)it.next();
-		   Set<String> v = null;
-			   v = result.get(s);
-		   new TableItem(table1,SWT.LEFT).setText(new String[]{s,getString(v)});
+		   str = (String)it.next();	
+		   functions = new StringBuffer("");
+		   if((v = result.get(str)) != null){		   
+				if(flag == 0){
+					for(String fID : v){
+						temp = Paramater.functionAnnotation.get(fID);					
+						functions.append(temp+"; ");																
+					}
+				}else if(flag == 1){
+					for(String fID : v){
+						temp = Paramater.goGeneAnnotation.get(fID);											
+						functions.append(temp+"; ");																
+					}										
+				} 
+				if(temp != null){
+					TableItem ti = new TableItem(table1,SWT.LEFT);
+					ti.setText(0, str);
+					ti.setText(1, temp);					
+				}							
+			}
+				
+	//	   new TableItem(table1,SWT.LEFT).setText(new String[]{s,getString(v)});
 		  }
 	   label3.setText("Total Item: "+table1.getItemCount());
 	   MessageDialog.openInformation(dialogShell, "Success", "File read Successfully!");

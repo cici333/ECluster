@@ -23,7 +23,11 @@ public class ViewPart2 extends ViewPart {
 	public void setContent(Node node){
 		text.setText("");
 		text.append("NodeID:\t"+node.getNodeID()+"\n");
-		text.append("Neighbours:\t"+getString(node.getNeighbours())+"\n");
+		text.append("Neighbours:\t");
+		for(Node neighbour : node.getNeighbours()){
+			text.append(neighbour.getNodeID()+", ");
+		}
+		text.append("\n");
 		text.append("Annotation:\t"+Paramater.currentProteinFunction.get(node.getNodeID().toUpperCase())+"\n");
 	}
 	
