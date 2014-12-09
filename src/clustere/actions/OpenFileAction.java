@@ -177,7 +177,7 @@ public class OpenFileAction extends Action {
 			str = br.readLine();
 			while (str != null) {
 				i++;
-				str = str.toUpperCase();
+		//		str = str.toUpperCase();
 				s = new Scanner(str);
 				if(s.hasNext()){
 					tempstr1 = s.next(); // 第一个节点
@@ -252,190 +252,7 @@ public class OpenFileAction extends Action {
 		}
 	}
 	
-	/**
-	 * 打开保存的文件
-	 */
-	/*
-	public void openExistClusters(){
-		if(GraphInfo.nodelist.size()!=0||ViewPart1.list.size()!=0||Paramater.algorithmsResults.size()!=0){
-			   boolean confirm = MessageDialog.openConfirm(new Shell(), "Warning", "A file has been inputed,Do you really want to open a new ?");
-			    if(!confirm)
-			          return;
-			}
-		FileDialog fd = new FileDialog(new Shell(),SWT.OPEN);
-		fd.setFilterExtensions(new String[] { "*.*","*.txt" });
-		fd.setFilterNames(new String[] {"所有文件*.*", "文本格式(*.txt)" });
-		String filename = fd.open();
-		if(filename==null||filename.equals("")){
-			return;
-		}else {
-			paramRefresh();
-		}
-		String algorithmName = null;
-		Vector[] v = null;
-		Scanner scanner = null;
-		TreeElement rootElement = new TreeElement();
-		TreeElement childElement = null;
-		Vector<Edge> edgelist = null;
-		HashMap<String,Edge> edgeMap = null;
-		Vector<Node> rootNodes = new Vector<Node>();
-		Vector<Edge> rootEdges = new Vector<Edge>();
-		HashMap<String,Edge> rootMap = new HashMap<String,Edge>();
-		HashMap<String,Node> rootNodesMap = new HashMap<String,Node>();
-		HashMap<String,Node> tempNodesMap = new HashMap<String,Node>();
-		try{
-		BufferedReader br = new BufferedReader(new FileReader(new File(filename)));
-		String str = br.readLine();
-		int index1 = str.indexOf(':');
-		int index2 = str.lastIndexOf(':');
-		algorithmName = str.substring(0,index1);
-		rootElement.setEdges(rootEdges);
-		rootElement.setNodes(rootNodes);
-		int size = Integer.parseInt(str.substring(index2+1, str.length()));
-		rootElement.setName(algorithmName+"("+size+")");
-		
-		
-		/*Read network*/
-	/*
-		str = br.readLine();
-		str = br.readLine();
-		Scanner s;
-		String tempstr1;
-		String tempstr2;
-		Node tempnode1;
-		Node tempnode2;
-		Edge tempedge;
-		while (str != null) {
-			if(str.startsWith("*******"))break;
-			str = str.toUpperCase();
-			s = new Scanner(str);
-			while (s.hasNext()) {
-			
-				tempstr1 = s.next(); // 第一个节点
-				tempnode1 = new Node(tempstr1);
-				if (GraphInfo.nodemap.get(tempstr1) == null) {
-					GraphInfo.nodemap.put(tempstr1, tempnode1);
-					GraphInfo.nodelist.add(tempnode1);
-				} else
-					tempnode1 = GraphInfo.nodemap.get(tempstr1);
-				tempstr2 = s.next(); // 第二个节点
-				tempnode2 = new Node(tempstr2);
-				if (GraphInfo.nodemap.get(tempstr2) == null) {
-					GraphInfo.nodemap.put(tempstr2, tempnode2);
-					GraphInfo.nodelist.add(tempnode2);
-				} else
-					tempnode2 = GraphInfo.nodemap.get(tempstr2);
-				tempedge = new Edge(tempnode1, tempnode2);
-					GraphInfo.edgelist.add(tempedge);
-					tempnode1.getNeighbours().add(tempnode2);
-					tempnode2.getNeighbours().add(tempnode1);
-		//		}
-				break;
-			}
-			str = br.readLine();
-		}
-		/*Read Clusters*/
-	/*
-		v = new Vector[size];
-		int index = -1;
-		str = br.readLine();
-		while(str!=null){
-			System.out.println("UUUUU");	
-			if(str.startsWith("Cluster:")){
-				index++;
-				v[index] = new Vector();
-				edgelist = new Vector<Edge>();
-				edgeMap = new HashMap<String,Edge>();
-				tempNodesMap.clear();
-				childElement = new TreeElement();
-				rootElement.addChild(childElement);
-				childElement.setNodes(v[index]);
-				childElement.setEdges(edgelist);
-				Node temp ;
-				if(rootNodesMap.get("Cluster"+index)!=null){
-					temp = rootNodesMap.get("Cluster"+index);
-				}else{
-				   temp = new Node("Cluster"+index);
-				   rootNodes.add(temp);
-				    rootNodesMap.put("Cluster"+index, temp);
-				}
-				childElement.setNode(temp);
-				scanner = new Scanner(str);
-				String s1 = scanner.next();
-				int scope = scanner.nextInt();
-				temp.setScope(scope);
-				childElement.setName(s1+"("+scope+")");
-				while(scanner.hasNext()){
-					System.out.println("ZZZZZZZZZZZ");
-					String nodeID = scanner.next();
-					Node n1;
-					if(rootNodesMap.get(nodeID)!=null){
-						n1 = rootNodesMap.get(nodeID);
-					}else{
-						n1 = new Node(nodeID);
-						rootNodes.add(n1);
-						rootNodesMap.put(nodeID, n1);
-					}
-									
-					if(rootMap.get(temp.getNodeID()+n1.getNodeID())==null){
-						Edge edge = new Edge(temp,n1);
-						temp.getNeighbours().add(n1);
-						n1.getNeighbours().add(temp);
-						rootEdges.add(edge);
-						rootMap.put(temp.getNodeID()+n1.getNodeID(), edge);
-						rootMap.put(n1.getNodeID()+temp.getNodeID(), edge);
-					}
-				
-				}
-								
-			}else{
-				scanner = new Scanner(str);
-				String str1 = scanner.next();
-				Node nn1;
-				if(tempNodesMap.get(str1)!=null)
-					nn1 = tempNodesMap.get(str1);
-				else {
-					nn1 = new Node(str1);
-					tempNodesMap.put(str1, nn1);
-					v[index].add(nn1);
-				}
-				while(scanner.hasNext()){
-					System.out.println("TTTTTTTTTT");
-					String id = scanner.next();
-					Node nn2;
-					if(tempNodesMap.get(id)!=null){
-						nn2 = tempNodesMap.get(id);
-					}else{
-						nn2 = new Node(id);
-						tempNodesMap.put(id, nn2);
-						v[index].add(nn2);
-					}
-					
-					if(edgeMap.get(nn1.getNodeID()+nn2.getNodeID())==null){
-						Edge edge = new Edge(nn1,nn2);
-						nn1.getNeighbours().add(nn2);
-						nn2.getNeighbours().add(nn1);
-						edgelist.add(edge);
-						edgeMap.put(nn1.getNodeID()+nn2.getNodeID(), edge);
-						edgeMap.put(nn2.getNodeID()+nn1.getNodeID(), edge);
-					}
-				}
-			}
-			str = br.readLine();
-		}
-		
 
-		br.close();
-		}catch (Exception e) {
-			e.printStackTrace();
-		 MessageDialog.openError(null, "ERROE", "File read exception!");
-		 GraphInfo.refresh();
-		 return ;
-		}
-		MessageDialog.openInformation(new Shell(), "success", "File read successfully");
-		initVariable(algorithmName, v, rootElement);
-	}
-	
 	/**
 	 * 读取完保存的cluster文件后  初始化相应的变量
 	 * @param algorithmName
@@ -516,36 +333,51 @@ public class OpenFileAction extends Action {
 			Edge tempedge;
 			while (str != null) {               //读取原始网络文件
 				if(str.startsWith("******"))break;
-				str = str.toUpperCase();
+			//	str = str.toUpperCase();
 				s = new Scanner(str);
-				while (s.hasNext()) {
-					
+				if(s.hasNext()){
 					tempstr1 = s.next(); // 第一个节点
-					
-					tempnode1 = new Node(tempstr1);
-					if (!GraphInfo.nodemap.containsKey(tempstr1)) {
+					if(s.hasNext()){
+						tempstr2 = s.next(); // 第二个节点
+						if(!tempstr1.isEmpty() && !tempstr2.isEmpty()){
+							if(tempstr1.equals(tempstr2)){
+								if(!GraphInfo.nodemap.containsKey(tempstr1)){
+									tempnode1 = new Node(tempstr1);
+									GraphInfo.nodemap.put(tempstr1, tempnode1);
+									GraphInfo.nodelist.add(tempnode1);						
+								}else{
+									tempnode1 = GraphInfo.nodemap.get(tempstr1);						
+								}
+								tempnode1.getNeighbours().add(tempnode1);
+								tempedge = new Edge(tempnode1, tempnode1);
+								
+							}else{
+								if(!GraphInfo.nodemap.containsKey(tempstr1)){
+									tempnode1 = new Node(tempstr1);
+									GraphInfo.nodemap.put(tempstr1, tempnode1);
+									GraphInfo.nodelist.add(tempnode1);						
+								}else{
+									tempnode1 = GraphInfo.nodemap.get(tempstr1);						
+								}
+								if(!GraphInfo.nodemap.containsKey(tempstr2)){
+									tempnode2 = new Node(tempstr2);
+									GraphInfo.nodemap.put(tempstr2, tempnode2);
+									GraphInfo.nodelist.add(tempnode2);		
+								}else{
+									tempnode2 = GraphInfo.nodemap.get(tempstr2);						
+								}
+								tempnode1.getNeighbours().add(tempnode2);						
+								tempnode2.getNeighbours().add(tempnode1);
+								tempedge = new Edge(tempnode1, tempnode2);
+							}
+							GraphInfo.edgelist.add(tempedge);
+							tempnode1.AddAdjacentEdges(tempedge);
+						}
+					}else if(!tempstr1.isEmpty() && !GraphInfo.nodemap.containsKey(tempstr1)){
+						tempnode1 = new Node(tempstr1);
 						GraphInfo.nodemap.put(tempstr1, tempnode1);
-						GraphInfo.nodelist.add(tempnode1);
-					} else{
-						tempnode1 = GraphInfo.nodemap.get(tempstr1);
+						GraphInfo.nodelist.add(tempnode1);											
 					}
-					
-					tempstr2 = s.next(); // 第二个节点
-					
-					tempnode2 = new Node(tempstr2);
-					if (!GraphInfo.nodemap.containsKey(tempstr2)) {
-						GraphInfo.nodemap.put(tempstr2, tempnode2);
-						GraphInfo.nodelist.add(tempnode2);
-					} else{
-						tempnode2 = GraphInfo.nodemap.get(tempstr2);
-					}
-					tempedge = new Edge(tempnode1, tempnode2);
-
-					GraphInfo.edgelist.add(tempedge);
-					tempnode1.getNeighbours().add(tempnode2);
-					tempnode2.getNeighbours().add(tempnode1);
-		//			}
-			//		break;
 				}
 				str = br.readLine();
 			}

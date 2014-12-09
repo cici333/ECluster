@@ -217,8 +217,16 @@ public class ClusterEditor extends EditorPart {
 			Node node = (Node)tv.getElementAt(index);
 			text.setText("");
 			text.append("NodeID:\t"+node.getNodeID()+"\n");
-			text.append("Neighbours:\t"+getString(node.getNeighbours())+"\n");
-			text.append("Annotation:\t"+Paramater.currentProteinFunction.get(node.getNodeID().toUpperCase())+"\n");
+			text.append("Neighbours:\t");
+			for(Node neighbour : node.getNeighbours()){
+				text.append(neighbour.getNodeID()+", ");
+			}
+			text.append("\n");
+			text.append("Annotation:\t");
+			for(String s : Paramater.currentProteinFunction.get(node.getNodeID().toUpperCase())){
+				text.append(Paramater.functionAnnotation.get(s)+", ");
+			}
+			text.append("\n");
 			chooseNode(node);
 		}
 	}
